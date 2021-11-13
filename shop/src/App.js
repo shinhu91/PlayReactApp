@@ -60,8 +60,8 @@ function App() {
           </div>
         </div>
       </Route>
-      <Route exact path="/detail">
-        <Detail />
+      <Route exact path="/detail/:id">
+        <Detail shoe={shoes}/>
       </Route>
 
       <Route exact path="/:id">
