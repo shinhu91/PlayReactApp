@@ -1,0 +1,25 @@
+$red : rgb(95, 0, 0);
+
+.red {
+    color: $red;
+}
+
+.warning {
+    background-color: #eeeeee;
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 500px;
+    width: 100%;
+    margin: auto;
+}
+
+.warning p {
+    margin-bottom: 0px;
+}
+
+.warning-red {
+    @extend .warning;
+    background-color: #9b0000;
+    color: #ffffff;
+    font-weight: 600;
+}

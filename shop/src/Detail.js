@@ -4,6 +4,8 @@ import {useHistory, useParams} from 'react-router-dom'
 
 import styled from 'styled-components'
 
+import './Detail.scss'
+
 const HeaderDiv = styled.div`
     padding : 10px;
 `
@@ -24,8 +26,11 @@ function Detail(props) {
     return (
         <div className="container">
             <HeaderDiv>
-                <Headerh4>Detail</Headerh4>
+                <Headerh4 className="red">Detail</Headerh4>
             </HeaderDiv>
+            <div className="warning-red">
+                <p>재고가 얼마 남지 않았습니다</p>
+            </div>
             <div className="row">
                 <div className="col-md-6">
                 <img src={productNo.img} width="100%" />
