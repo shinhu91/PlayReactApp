@@ -2,19 +2,33 @@ import React, {useState} from 'react'
 
 import {useHistory, useParams} from 'react-router-dom'
 
+import styled from 'styled-components'
+
+const HeaderDiv = styled.div`
+    padding : 10px;
+`
+const Headerh4 = styled.h4`
+    font-size : 25px;
+`
+
 function Detail(props) {
 
     const hostory = useHistory()
     const {id} = useParams()
 
-    const productNo = props.shoe.find(function(el){
+    const productNo = props.shoe.find(el => {
+        console.log(el.id, id)
         return el.id == id
     })
+
     return (
         <div className="container">
+            <HeaderDiv>
+                <Headerh4>Detail</Headerh4>
+            </HeaderDiv>
             <div className="row">
                 <div className="col-md-6">
-                <img src={props.shoe[id].img} width="100%" />
+                <img src={productNo.img} width="100%" />
                 </div>
                 <div className="col-md-6 mt-4">
                 <h4 className="pt-5">{productNo.title}</h4>

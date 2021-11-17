@@ -42,31 +42,32 @@ function App() {
         </Navbar.Collapse>
         </Container>
       </Navbar>
-
-      <Route exact path="/">
-        <div className="jumbotron">
-          <h1>20% Season Off</h1>
-        </div>
-        <div className="container">
-          <div className="row">
-            {
-              shoes.map((e, i) => {
-                console.log(e, i)
-                return (
-                  <Product shoes={e} />
-                )
-              })
-            }
+      
+      <Switch>
+        <Route exact path="/">
+          <div className="jumbotron">
+            <h1>20% Season Off</h1>
           </div>
-        </div>
-      </Route>
-      <Route exact path="/detail/:id">
-        <Detail shoe={shoes}/>
-      </Route>
+          <div className="container">
+            <div className="row">
+              {
+                shoes.map((e, i) => {
+                  return (
+                    <Product shoes={e} />
+                  )
+                })
+              }
+            </div>
+          </div>
+        </Route>
+        <Route path="/detail/:id">
+          <Detail shoe={shoes}/>
+        </Route>
 
-      <Route exact path="/:id">
-        <div>ddd</div>
-      </Route>
+        <Route path="/:id">
+          <div>asdasdasdasdasdasd</div>
+        </Route>
+      </Switch>
     </div>
   );
 }

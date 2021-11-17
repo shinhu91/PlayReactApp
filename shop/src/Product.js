@@ -1,5 +1,5 @@
 function Product(props) {
-    console.log(props)
+
     return (
         <div className="col-md-4">
             <img src={props.shoes.img} width="100%" />
