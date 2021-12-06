@@ -1,0 +1,26 @@
+.palette-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+    background-color: #e4e4e4;
+}
+
+.color.active {
+    opacity: 1;
+}
+
+.color + .color {
+    margin-left: 1rem;
+}
+
+.color {
+    width: 2rem;
+    height: 2rem;
+    opacity: 0.5;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.color:hover {
+    opacity: 1;
+}
