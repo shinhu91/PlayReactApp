@@ -1,11 +1,12 @@
-const React = require('react')
+import React, { memo } from 'react';
 
-const Try = (props) => {
-    console.log("props", props)
-    const tries = props.tries
+const Try = memo(({ tryInfo }) => {
     return (
-        <li>{tries.try} - {tries.resultText}</li>
-    )
-}
+        <li>
+            <div>{tryInfo.try}</div>
+            <div>{tryInfo.result}</div>
+        </li>
+    );
+});
 
-export default Try
+export default Try;
