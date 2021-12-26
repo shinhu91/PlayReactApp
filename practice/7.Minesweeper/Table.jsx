@@ -1,21 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
+import { TableContext } from "./Minesweeper";
 import Tr from "./Tr";
 
-const Table = ({ tableData, onClickCell }) => {
-  return (
-    <table>
-      {tableData.map((v, i) => {
-        return (
-          <Tr
-            rowData={v}
-            rowIndex={i}
-            onClickCell={onClickCell}
-            tableData={tableData}
-          ></Tr>
-        );
-      })}
-    </table>
-  );
+const Table = () => {
+    const { tableData, dispatch } = useContext(TableContext);
+    return (
+        <table>
+            {tableData.map((v, i) => {
+                return <Tr rowIndex={i}></Tr>;
+            })}
+        </table>
+    );
 };
 
 export default Table;
