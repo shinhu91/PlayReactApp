@@ -1,11 +1,11 @@
 import React, { useCallback } from "react";
 import { useContext } from "react/cjs/react.development";
-import { CODE, OPEN_NORMAL, OPEN_MINE, TableContext } from "./Minesweeper";
+import { CODE, NORMAL_CLICK, MINE_CLICK, TableContext } from "./Minesweeper";
 
 const Td = ({ rowIndex, cellIndex }) => {
     const getStyledTd = (cellData) => {
         switch (cellData) {
-            case CODE.NORAL:
+            case CODE.NORMAL:
                 return {
                     backgroundColor: "white"
                 };
@@ -13,50 +13,58 @@ const Td = ({ rowIndex, cellIndex }) => {
                 return {
                     backgroundColor: "#eee"
                 };
-            case CODE.NORMAL_OPEN:
+            case CODE.OPENED:
                 return {
-                    backgroundColor: "blue"
+                    backgroundColor: "#3a7644",
+                    color: "#fff"
                 };
-            case CODE.MINE_OPEN:
+            case CODE.MINE_CLICK:
                 return {
                     backgroundColor: "red"
                 };
             default:
-                return {};
+                return {
+                    backgroundColor: "#3a7644",
+                    color: "#fff"
+                };
         }
     };
 
-    const getTdText = useCallback((cellData, rowIndex, cellIndex) => {
-        if (CODE.NORMAL == cellData) {
-            return "";
-        } else if (CODE.MINE == cellData) {
-            return "";
-        } else if (CODE.NORMAL_OPEN == cellData) {
-            // 주변에 몇개의 지뢰가 있는지
-            let mineCount = 0;
-            return "O";
-        } else if (CODE.MINE_OPEN == cellData) {
-            return "X";
+    const getTdText = useCallback((cellData) => {
+        switch (cellData) {
+            case CODE.NORMAL:
+                return "";
+            case CODE.MINE:
+                return "";
+            case CODE.OPENED:
+                return "";
+            case CODE.MINE_CLICK:
+                return "💣";
+            default:
+                return cellData;
         }
     });
 
-    const { tableData, dispatch } = useContext(TableContext);
+    const { tableData, dispatch, halted } = useContext(TableContext);
 
     const onClickCell = useCallback(
         (cellData) => {
+            if (halted) {
+                return;
+            }
             switch (cellData) {
                 case CODE.NORMAL_OPEN:
                 case CODE.MINE_OPEN:
                 case CODE.NORMAL:
                     dispatch({
-                        type: OPEN_NORMAL,
+                        type: NORMAL_CLICK,
                         row: rowIndex,
                         cell: cellIndex
                     });
                     return;
                 case CODE.MINE:
                     dispatch({
-                        type: OPEN_MINE,
+                        type: MINE_CLICK,
                         row: rowIndex,
                         cell: cellIndex
                     });
@@ -65,7 +73,7 @@ const Td = ({ rowIndex, cellIndex }) => {
                     return;
             }
         },
-        [tableData[rowIndex][cellIndex]]
+        [tableData[rowIndex][cellIndex], halted]
     );
     return (
         <td
@@ -74,9 +82,10 @@ const Td = ({ rowIndex, cellIndex }) => {
                 onClickCell(tableData[rowIndex][cellIndex]);
             }}
         >
-            {rowIndex}
-            {cellIndex}
-            {tableData[rowIndex][cellIndex]}
+            {/* {rowIndex}
+            {cellIndex} */}
+            {/* {tableData[rowIndex][cellIndex]} */}
+            {getTdText(tableData[rowIndex][cellIndex])}
         </td>
     );
 };
