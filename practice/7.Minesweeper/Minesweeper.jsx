@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useState } from "react";
+import React, { createContext, useEffect, useReducer, useState } from "react";
 import Form from "./Form";
 import Table from "./Table";
 
@@ -20,7 +20,7 @@ export const CODE = {
 
 export const TableContext = createContext({
     tableData: [],
-    halted: false,
+    halted: true,
     dispatch: () => {}
 });
 
@@ -57,12 +57,24 @@ const mineSearchInit = (row, col, mine) => {
 };
 const initialState = {
     tableData: mineSearchInit(10, 10, 15),
-    halted: false
+    data: {
+        row: 0,
+        cell: 0,
+        mine: 0
+    },
+    halted: true,
+    openedCount: 0,
+    timer: 0,
+    result: ""
 };
 
 export const START_GAME = "START_GAME";
 export const NORMAL_CLICK = "NORMAL_CLICK";
 export const MINE_CLICK = "MINE_CLICK";
+export const INCREMENT_TIMER = "INCREMENT_TIMER";
+export const FLAG_CELL = "FLAG_CELL";
+export const QUESTION_CELL = "QUESTION_CELL";
+export const NORMALIZE_CELL = "NORMALIZE_CELL";
 
 const reducer = (state, action) => {
     console.log(action);
@@ -70,8 +82,12 @@ const reducer = (state, action) => {
         case START_GAME:
             return {
                 ...state,
+                data: { row: action.row, cell: action.cell, mine: action.mine },
                 tableData: mineSearchInit(action.row, action.cell, action.mine),
-                halted: false
+                halted: false,
+                openedCount: 0,
+                timer: 0,
+                result: ""
             };
         case NORMAL_CLICK: {
             const tableData = [...state.tableData];
@@ -80,7 +96,6 @@ const reducer = (state, action) => {
             });
             const checked = [];
             let openedCount = 0;
-            console.log(tableData.length, tableData[0].length);
 
             const checkAround = (row, cell) => {
                 if (
@@ -107,6 +122,7 @@ const reducer = (state, action) => {
                 } else {
                     checked.push(row + "/" + cell);
                 } // 한 번 연칸은 무시하기
+
                 let around = [
                     tableData[row][cell - 1],
                     tableData[row][cell + 1]
@@ -149,7 +165,7 @@ const reducer = (state, action) => {
                             near.push([row + 1, cell + 1]);
                         }
                         near.forEach((n) => {
-                            if (tableData[n[0]][n[1]] !== CODE.OPENED) {
+                            if (tableData[n[0]][n[1]] < CODE.OPENED) {
                                 checkAround(n[0], n[1]);
                             }
                         });
@@ -165,6 +181,20 @@ const reducer = (state, action) => {
             checkAround(action.row, action.cell);
             let halted = false;
             let result = "";
+
+            if (
+                state.data.row * state.data.cell - state.data.mine ===
+                state.openedCount + openedCount
+            ) {
+                halted = true;
+                result = "VICTORY ! ";
+            }
+
+            console.log(state.data.row);
+            console.log(state.data.cell);
+            console.log(state.data.mine);
+            console.log(openedCount);
+            console.log(result);
             return {
                 ...state,
                 tableData,
@@ -218,6 +248,12 @@ const reducer = (state, action) => {
                 tableData[action.row][action.cell] = CODE.NORMAL;
             }
         }
+        case INCREMENT_TIMER: {
+            return {
+                ...state,
+                timer: state.timer + 1
+            };
+        }
         default:
             return state;
     }
@@ -225,43 +261,31 @@ const reducer = (state, action) => {
 
 const Minesweeper = () => {
     const [state, dispatch] = useReducer(reducer, initialState);
-    const { tableData, halted } = state;
+    const { tableData, halted, result, timer } = state;
 
     const value = { tableData, halted, dispatch };
+
+    useEffect(() => {
+        let timer;
+        if (halted == false) {
+            timer = setInterval(() => {
+                dispatch({ type: INCREMENT_TIMER });
+            }, 1000);
+        }
+        return () => {
+            clearInterval(timer);
+        };
+    }, [halted]);
 
     return (
         <>
             {
-                //     halted ? (
-                //     <div
-                //         style={{
-                //             display: "flex",
-                //             height: "920px",
-                //             justifyContent: "center",
-                //             textAlign: "center",
-                //             margin: "0 auto",
-                //             alignItems: "center"
-                //         }}
-                //     >
-                //         <span
-                //             style={{
-                //                 margin: "0 auto",
-                //                 background: "rgb(255 0 0 / 50%)",
-                //                 fontWeight: "bold",
-                //                 fontSize: "40px",
-                //                 color: "white",
-                //                 padding: "12px",
-                //                 borderRadius: "18px"
-                //             }}
-                //         >
-                //             Game Over
-                //         </span>
-                //     </div>
-                // ) : (
                 <TableContext.Provider value={value}>
                     <Form></Form>
                     <Table></Table>
+                    {timer} 초 <br /> {result}
                 </TableContext.Provider>
+
                 // )}
             }
         </>
