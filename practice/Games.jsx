@@ -38,8 +38,10 @@ const Games = () => {
             <Link to="/game/lotto">로또</Link>
             &nbsp;
             <Link to="/game/mine-search">지뢰 찾기</Link>
+            &nbsp;
+            <Link to="/game/test">없는 페이지</Link>
             <Routes>
-                <Route path="/game/:name/" element={<GameMatcher />} />
+                <Route path="/game/*" element={<GameMatcher />} />
             </Routes>
         </BrowserRouter>
     );
