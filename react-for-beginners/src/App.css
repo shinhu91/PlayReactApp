@@ -5,6 +5,19 @@
     border: 1px solid;
 }
 
+.basic-table th {
+    font-weight: unset;
+    text-align: center;
+    border: 1px solid;
+    font-weight: 600;
+}
+
 .basic-table tr.even {
     background-color: rgb(215 215 215 / 36%);
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    margin: 100px;
 }
